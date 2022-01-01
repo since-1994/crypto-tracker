@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import * as React from 'react';
+import styled from 'styled-components';
 import './App.css';
+
+interface BoxProps {
+  bgColor: string;
+}
+
+const Box = styled.div<BoxProps>`
+  background-color: ${({theme}) => theme.textColor};
+  width: 100px;
+  height: 100px;
+`;
+
+const Circle = styled(Box)`
+  border-radius: 50%;
+`;
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Box bgColor="red" ></Box>
+      <Circle bgColor="teal"></Circle>
     </div>
   );
 }
