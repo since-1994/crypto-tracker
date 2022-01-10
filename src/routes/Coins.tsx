@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { fetchCoins } from '../api';
 
 const Loading = styled.div`
     position: fixed;
@@ -117,7 +119,8 @@ interface CoinObject{
 ] */
 
 const Coins = () => {
-    const [coins, setCoins] = React.useState<CoinObject[]>([]);
+    const { isLoading, data: coins }  = useQuery<CoinObject[]>('allCoins', fetchCoins)
+    /* const [coins, setCoins] = React.useState<CoinObject[]>([]);
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
@@ -128,11 +131,11 @@ const Coins = () => {
             console.log(coins.length)
             setLoading(false);
         })()
-    }, [])
+    }, []) */
 
     return  (
         <Container>
-            {loading && (
+            {isLoading && (
                 <Loading>
                     <LoadingBullet/>
                     <LoadingBullet/>
@@ -143,7 +146,7 @@ const Coins = () => {
                 <Title>코인</Title>
             </Header>
             <CoinsList>
-                {coins.map(coin => {
+                {coins?.map(coin => {
                     return (
                         <Coin key={coin.id}>
                             <Link to={`/${coin.id}`} state={{coinName: coin.name}}>

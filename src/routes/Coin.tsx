@@ -1,9 +1,12 @@
 import * as React from 'react';
+const {useMemo} = React;
 import styled from 'styled-components';
 import { useParams, useLocation, Routes, Route, Link, useMatch } from 'react-router-dom'
 import Chart from './Chart';
 import Price from './Price';
 import { NavLink } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { fetchCoinInfo, fetchCoinPrice } from '../api';
 
 const Container = styled.div`
     padding: 0 20px;
@@ -56,7 +59,7 @@ const Tabs = styled.ul`
     display: flex;
 `;
 
-const Tab = styled.li<{isActive: boolean}>`
+const Tab = styled.li`
     flex-grow: 1;
     a{
         display: flex;
@@ -151,20 +154,11 @@ const Coin = () => {
 
     const {coinName} = state as RouteLocations || {};
 
-    const [info, setInfo] = React.useState<IInfo|undefined>();
-    const [priceInfo, setPriceInfo] = React.useState<IPriceInfo|undefined>();
-    const [loading, setLoading] = React.useState(true);
+    const {isLoading: isInfoLoading, data: info} = useQuery<IInfo>(['info', coinId], () => fetchCoinInfo(coinId || ''));
+    
+    const {isLoading: isPriceLoading, data: priceInfo} = useQuery<IPriceInfo>(['price', coinId], () => fetchCoinPrice(coinId || ''));
 
-    React.useEffect(() => {
-        (async() => {
-            const infoData = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
-            const priceData = await (await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)).json();
-
-            setInfo(infoData);
-            setPriceInfo(priceData);
-            setLoading(false);
-        })();
-    }, []);
+    const loading = useMemo(() => isInfoLoading || isPriceLoading, [isInfoLoading, isPriceLoading]);
 
     return (
         <Container>
