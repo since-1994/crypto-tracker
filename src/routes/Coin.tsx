@@ -1,5 +1,5 @@
 import * as React from 'react';
-const {useMemo} = React;
+import {useMemo} from 'react';
 import styled from 'styled-components';
 import { useParams, useLocation, Routes, Route, Link, useMatch } from 'react-router-dom'
 import Chart from './Chart';
@@ -155,7 +155,7 @@ const Coin = () => {
     const {coinName} = state as RouteLocations || {};
 
     const {isLoading: isInfoLoading, data: info} = useQuery<IInfo>(['info', coinId], () => fetchCoinInfo(coinId || ''));
-    
+
     const {isLoading: isPriceLoading, data: priceInfo} = useQuery<IPriceInfo>(['price', coinId], () => fetchCoinPrice(coinId || ''));
 
     const loading = useMemo(() => isInfoLoading || isPriceLoading, [isInfoLoading, isPriceLoading]);
@@ -213,10 +213,10 @@ const Coin = () => {
                         </Tab>
                     </Tabs>
                     <Routes>
-                        <Route path='chart' element={<Chart />}></Route>
+                        <Route path='chart' element={<Chart coinId={coinId ||''} />}></Route>
                         <Route path='price' element={<Price />}></Route>
                     </Routes>
-                </Body>
+                </Body>    
             )}
         </Container>
     )
