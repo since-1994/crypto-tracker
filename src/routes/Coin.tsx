@@ -156,7 +156,9 @@ const Coin = () => {
 
     const {isLoading: isInfoLoading, data: info} = useQuery<IInfo>(['info', coinId], () => fetchCoinInfo(coinId || ''));
 
-    const {isLoading: isPriceLoading, data: priceInfo} = useQuery<IPriceInfo>(['price', coinId], () => fetchCoinPrice(coinId || ''));
+    const {isLoading: isPriceLoading, data: priceInfo} = useQuery<IPriceInfo>(['price', coinId], () => fetchCoinPrice(coinId || ''), {
+        refetchInterval: 5000
+    });
 
     const loading = useMemo(() => isInfoLoading || isPriceLoading, [isInfoLoading, isPriceLoading]);
 
@@ -182,9 +184,9 @@ const Coin = () => {
                         </InfoItem>
                         <InfoItem>
                             <h1>
-                                OPEN SOURCE: 
+                                PRICE: 
                             </h1>
-                            {info?.open_source}
+                            ${priceInfo?.quotes.USD.price.toFixed(2)}
                         </InfoItem>
                     </InfoList>
                     <span>
