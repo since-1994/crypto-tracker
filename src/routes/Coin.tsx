@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Helmet} from 'react-helmet';
 import {useMemo} from 'react';
 import styled from 'styled-components';
 import { useParams, useLocation, Routes, Route, Link, useMatch } from 'react-router-dom'
@@ -7,6 +8,7 @@ import Price from './Price';
 import { NavLink } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { fetchCoinInfo, fetchCoinPrice } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     padding: 0 20px;
@@ -71,6 +73,17 @@ const Tab = styled.li`
             border-bottom: 1px solid ${props => props.theme.accentColor}
         }
     }
+`;
+
+const BackBtn = styled.button`
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    top: 20px;
+    left: 20px;
+    border: none;
+    cursor: pointer;
 `;
 
 type RouteParams = {
@@ -148,6 +161,7 @@ const Coin = () => {
     const { coinId } = useParams<keyof RouteParams>();
     const priceMatch = useMatch('/:coinId/price');
     const chartMatch = useMatch('/:coinId/chart');
+    const navigate = useNavigate();
     const {
         state
     } = useLocation();
@@ -162,8 +176,18 @@ const Coin = () => {
 
     const loading = useMemo(() => isInfoLoading || isPriceLoading, [isInfoLoading, isPriceLoading]);
 
+    const onClickBackBtn = React.useCallback(e => {
+        navigate(-1);
+    }, [navigate])
+
     return (
         <Container>
+            <Helmet>
+                <title>
+                    {info?.name || 'loading...'}
+                </title>
+            </Helmet>
+            <BackBtn onClick={onClickBackBtn}>{'<'}</BackBtn>
             <Header>
                 <Title>코인 { coinName ? coinName : loading? 'loading...' : info?.name }</Title>
             </Header>
