@@ -41,10 +41,11 @@ const InfoList = styled.ul`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #1d2021;
+    background-color: #80888b;
     border-radius: 15px;
     width: 100%;
     padding: 10px 20px;
+    color: ${props => props.theme.bgColor}
 `;
 
 const InfoItem = styled.li`
@@ -157,7 +158,10 @@ interface IPriceInfo{
     };
 }
 
-const Coin = () => {
+interface CoinProps{
+}
+
+const Coin:React.FC<CoinProps> = () => {
     const { coinId } = useParams<keyof RouteParams>();
     const priceMatch = useMatch('/:coinId/price');
     const chartMatch = useMatch('/:coinId/chart');

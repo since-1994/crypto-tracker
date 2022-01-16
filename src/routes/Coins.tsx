@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { fetchCoins } from '../api';
+import { isDarkAtom } from '../atoms';
 
 const Loading = styled.div`
     position: fixed;
@@ -40,7 +42,7 @@ const CoinsList = styled.ul``;
 const Coin = styled.li`
     display: flex;
     background-color: white;
-    color: ${props => props.theme.bgColor};
+    color: ${props => props.theme.textColor};
     border-radius: 15px;
     max-width: 480px;
     margin: 0 auto 10px;
@@ -118,8 +120,13 @@ interface CoinObject{
   },
 ] */
 
-const Coins = () => {
+interface CoinsProps {
+}
+
+const  Coins: React.FC<CoinsProps> = () => {
     const { isLoading, data: coins }  = useQuery<CoinObject[]>('allCoins', fetchCoins)
+
+    const setIsDark = useSetRecoilState(isDarkAtom);
     /* const [coins, setCoins] = React.useState<CoinObject[]>([]);
     const [loading, setLoading] = React.useState(true);
 
@@ -143,7 +150,8 @@ const Coins = () => {
                 </Loading>
             )}
             <Header>
-                <Title>코인</Title>
+                <Title>코인</Title>                
+			<button onClick={() => {setIsDark(prev => !prev)}}>toggle</button>
             </Header>
             <CoinsList>
                 {coins?.map(coin => {
