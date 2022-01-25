@@ -5,6 +5,7 @@ import Router from './routes/Router';
 import { createGlobalStyle } from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import {isDarkAtom} from './atoms';
+import TodoList from './TodoList';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap');
@@ -61,8 +62,6 @@ a{
 }
 body {
   font-family: 'Noto Sans KR', sans-serif;
-  background-color: ${({theme}) => theme.bgColor};
-  color: ${({theme}) => theme.textColor}
 }
 `;
 
@@ -73,10 +72,8 @@ function App() {
 
   return (
     <>
-		<ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-			<GlobalStyle/>
-			<Router/>
-	  	</ThemeProvider>
+	  <GlobalStyle/>
+	  <TodoList/>
     </>
   );
 }

@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
-    <RecoilRoot>
+    <RecoilRoot> 
       <QueryClientProvider client={queryClient}>        
           <App />        
           <ReactQueryDevtools initialIsOpen={false} />
